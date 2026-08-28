@@ -1012,13 +1012,6 @@
 			'description' => "5 x Crystal coin", // Description shown on website
 			'points' => 100, // How many points this offer costs
 		),
-		2 => array(
-			'type' => 1,
-			'itemid' => 2392,
-			'count' => 1,
-			'description' => "Fire sword",
-			'points' => 10,
-		),
 		3 => array(
 			'type' => 2,
 			'itemid' => 12466, // Item to display on page
@@ -1052,20 +1045,6 @@
 			'itemid' => [132, 140], // Outfit ID
 			'count' => 3, // Addon 0 = none, 1 = first, 2 = second, 3 = both
 			'description' => "Noble outfit with both addons",
-			'points' => 20,
-		),
-		8 => array(
-			'type' => 6,
-			'itemid' => 32, // Mount ID
-			'count' => 1,
-			'description' => "Gnarlhound mount",
-			'points' => 20,
-		),
-		9 => array(
-			'type' => 6,
-			'itemid' => 17,
-			'count' => 1,
-			'description' => "War horse",
 			'points' => 20,
 		),
 	);
