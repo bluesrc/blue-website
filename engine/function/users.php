@@ -33,11 +33,6 @@ function updateImage($id, $status) {
 	mysql_update("UPDATE `znote_images` SET `status`='$status' WHERE `id`='$id';");
 }
 
-// Fetch killers score
-function fetchMurders() {
-	return mysql_select_multi("SELECT `killed_by`, COUNT(`killed_by`) AS `kills` FROM `player_deaths` WHERE `is_player`='1' GROUP BY `killed_by` ORDER BY COUNT(`killed_by`) DESC LIMIT 0, 10;");
-}
-
 // Fetch deaths score
 function fetchLoosers() {
 	$array = mysql_select_multi("SELECT `player_id`, (SELECT `name` FROM `players` WHERE `id` = `player_id`) AS `name`, COUNT(`player_id`) AS `Deaths` FROM `player_deaths` GROUP BY `player_id` ORDER BY COUNT(`player_id`) DESC LIMIT 0, 10;");
@@ -51,57 +46,7 @@ function fetchLoosers() {
 
 // Fetch latest deaths
 function fetchLatestDeaths($from = 0, $to = 30) {
-	return mysql_select_multi("SELECT `d`.`level`, `p`.`name` AS `victim`, `d`.`time`, `d`.`is_player`, `d`.`killed_by` FROM `player_deaths` AS `d` INNER JOIN `players` AS `p` ON `d`.`player_id` = `p`.`id` ORDER BY `time` DESC LIMIT $from, $to;");
-}
-
-// latest deaths .3 (Based on code from Hauni@otland.net).
-function fetchLatestDeaths_03($rowz = 30, $killers = false) {
-	$countz = 0;
-	if ($rowz === false || $killers === true) $getdeaths = mysql_select_multi("SELECT * FROM player_deaths ORDER BY date DESC;");
-	else $getdeaths = mysql_select_multi("SELECT * FROM `player_deaths` ORDER BY `date` DESC LIMIT 0, $rowz;");
-	$data = false;
-	//while ($showdeaths = mysql_fetch_assoc($getdeaths)) {
-	if ($getdeaths !== false) {
-		for ($i = 0; $i < count($getdeaths); $i++) {
-			$pid = $getdeaths[$i]['player_id'];
-			$level = $getdeaths[$i]['level'];
-			$kid = user_get_kid($getdeaths[$i]['id']);
-
-			$killedby = user_name(user_get_killer_id($kid));
-
-			if ($killedby == false) {
-				$killedby = user_get_killer_m_name($kid);
-				$player = 0;
-			} else {
-				$player = 1;
-			}
-			if ($killedby === false) {
-				$player = 2;
-				$killedby = "Deleted player.";
-			}
-			$getname = mysql_select_single("SELECT `name` FROM `players` WHERE `id` = '$pid' LIMIT 1;");
-			$name = $getname['name'];
-			$row = array();
-			$row['level'] = $level;
-			$row['victim'] = $name;
-			$row['time'] = $getdeaths[$i]['date'];
-			$row['is_player'] = $player;
-			$row['killed_by'] = $killedby;
-			if ($killers) {
-				if ($player == 1) {
-					if ($rowz !== false) {
-						if ($countz < $rowz) {
-							$data[] = $row;
-							$countz++;
-						}
-					} else {
-						$data[] = $row;
-					}
-				}
-			} else $data[] = $row;
-		}
-	}
-	return $data;
+	return mysql_select_multi("SELECT `d`.`level`, `p`.`name` AS `victim`, `d`.`time`, `d`.`killed_by` FROM `player_deaths` AS `d` INNER JOIN `players` AS `p` ON `d`.`player_id` = `p`.`id` ORDER BY `time` DESC LIMIT $from, $to;");
 }
 
 // Support list
@@ -374,78 +319,6 @@ function get_guild_level_data($gid) {
 		return array('avg' => (int)($totallevels / $members), 'total' => $totallevels, 'players' => $members);
 	} else return false;
 }
-
-//
-// GUILD WAR
-//
-// Returns guild war entry for id
-function get_guild_war($warid) {
-	$warid = (int)$warid; // Sanitizing the parameter id
-	return mysql_select_single("SELECT `id`, `guild1`, `guild2`, `name1`, `name2`, `status`, `started`, `ended` FROM `guild_wars` WHERE `id`=$warid ORDER BY `started`;");
-}
-
-// TFS 0.3 compatibility
-function get_guild_war03($warid) {
-	$warid = (int)$warid; // Sanitizing the parameter id
-
-	$war = mysql_select_single("SELECT `id`, `guild_id`, `enemy_id`, `status`, `begin`, `end`
-		FROM `guild_wars` WHERE `id`=$warid ORDER BY `begin` DESC LIMIT 0, 30");
-	if ($war !== false) {
-		$war['guild1'] = $war['guild_id'];
-		$war['guild2'] = $war['enemy_id'];
-		$war['name1'] = get_guild_name($war['guild_id']);
-		$war['name2'] = get_guild_name($war['enemy_id']);
-		$war['started'] = $war['begin'];
-		$war['ended'] = $war['end'];
-	}
-	return $war;
-}
-
-// List all war entries
-function get_guild_wars() {
-	return mysql_select_multi("SELECT `id`, `guild1`, `guild2`, `name1`, `name2`, `status`, `started`, `ended` FROM `guild_wars` ORDER BY `started` DESC LIMIT 0, 30");
-}
-
-// Untested. (TFS 0.3 compatibility)
-function get_guild_wars03() {
-	$array = mysql_select_multi("SELECT `id`, `guild_id`, `enemy_id`, `status`, `begin`, `end` FROM `guild_wars` ORDER BY `begin` DESC LIMIT 0, 30");
-	if ($array !== false) {
-		for ($i = 0; $i < count($array); $i++) {
-			// Generating TFS 0.2 key values for this 0.3 query for web cross compatibility
-			$array[$i]['guild1'] = $array[$i]['guild_id'];
-			$array[$i]['guild2'] = $array[$i]['enemy_id'];
-			$array[$i]['name1'] = get_guild_name($array[$i]['guild_id']);
-			$array[$i]['name2'] = get_guild_name($array[$i]['enemy_id']);
-			$array[$i]['started'] = $array[$i]['begin'];
-			$array[$i]['ended'] = $array[$i]['end'];
-		}
-	}
-	return $array;
-}
-
-// List kill activity in wars.
-function get_war_kills($war_id) {
-	$war_id = (int)$war_id;// Sanitize - verify its an integer.
-	return mysql_select_multi("SELECT `id`, `killer`, `target`, `killerguild`, `targetguild`, `warid`, `time` FROM `guildwar_kills` WHERE `warid`=$war_id ORDER BY `time` DESC");
-}
-
-// TFS 0.3 compatibility
-function get_war_kills03($war_id) {
-	$war_id = (int)$war_id;// Sanitize - verify its an integer.
-	return mysql_select_multi("SELECT `id`, `guild_id`, `war_id`, `death_id` FROM `guild_kills` WHERE `war_id`=$war_id ORDER BY `id` DESC LIMIT 0, 30");
-}
-
-// Gesior compatibility port TFS .3
-function gesior_sql_death($warid) {
-	$warid = (int)$warid; // Sanitizing the parameter id
-	return mysql_select_multi('SELECT `pd`.`id`, `pd`.`date`, `gk`.`guild_id` AS `enemy`, `p`.`name`, `pd`.`level` FROM `guild_kills` gk LEFT JOIN `player_deaths` pd ON `gk`.`death_id` = `pd`.`id` LEFT JOIN `players` p ON `pd`.`player_id` = `p`.`id` WHERE `gk`.`war_id` = ' . $warid . ' AND `p`.`deleted` = 0 ORDER BY `pd`.`date` DESC');
-}
-function gesior_sql_killer($did) {
-	$did = (int)$did; // Sanitizing the parameter id
-	return mysql_select_multi('SELECT `p`.`name` AS `player_name`, `p`.`deleted` AS `player_exists`, `k`.`war` AS `is_war` FROM `killers` k LEFT JOIN `player_killers` pk ON `k`.`id` = `pk`.`kill_id` LEFT JOIN `players` p ON `p`.`id` = `pk`.`player_id` WHERE `k`.`death_id` = ' . $did . ' ORDER BY `k`.`final_hit` DESC, `k`.`id` ASC');
-}
-// end gesior
-// END GUILD WAR
 
 // ADMIN FUNCTIONS
 function set_ingame_position($name, $acctype) {

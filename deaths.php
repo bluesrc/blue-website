@@ -2,11 +2,7 @@
 $cache = new Cache('engine/cache/deaths');
 if ($cache->hasExpired()) {
 
-	if ($config['ServerEngine'] == 'TFS_02' || $config['ServerEngine'] == 'TFS_10') {
-		$deaths = fetchLatestDeaths();
-	} else if ($config['ServerEngine'] == 'TFS_03' || $config['ServerEngine'] == 'OTHIRE') {
-		$deaths = fetchLatestDeaths_03(30);
-	}
+	$deaths = fetchLatestDeaths();
 	$cache->setContent($deaths);
 	$cache->save();
 } else {
@@ -25,12 +21,7 @@ if ($deaths) {
 		echo '<tr>';
 		echo "<td>At level ". $death['level'] .": <a href='characterprofile.php?name=". $death['victim'] ."'>". $death['victim'] ."</a></td>";
 		echo "<td>". getClock($death['time'], true) ."</td>";
-		if ($death['is_player'] == 1) echo "<td>Player: <a href='characterprofile.php?name=". $death['killed_by'] ."'>". $death['killed_by'] ."</a></td>";
-		else if ($death['is_player'] == 0) {
-			if ($config['ServerEngine'] == 'TFS_03') echo "<td>Pokemon: ". ucfirst(str_replace("a ", "", $death['killed_by'])) ."</td>";
-			else echo "<td>Pokemon: ". ucfirst($death['killed_by']) ."</td>";
-		}
-		else echo "<td>". $death['killed_by'] ."</td>";
+		echo "<td>". ucfirst($death['killed_by']) ."</td>";
 		echo '</tr>';
 	} ?>
 </table>

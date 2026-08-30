@@ -24,7 +24,6 @@
 						<li><a href="highscores.php">Highscores</a> </li>
 						<?php if ($config['powergamers']['enabled']): ?><li><a href="powergamers.php">Powergamers</a> </li><?php endif; ?>
 						<li><a href="houses.php">Houses</a> </li>
-						<li><a href="killers.php">Killstatistics</a> </li>
 						<li><a href="deaths.php">Latest deaths</a> </li>
 						<li><a href="onlinelist.php">Online List</a> </li>
 					</ul>

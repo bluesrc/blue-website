@@ -73,18 +73,10 @@ if (user_logged_in() && is_admin($user_data)) {
 	if (isset($_POST['loadConfig']) && isset($_POST['configData'])) {
 		// Whitelist for values we are interested in
 		$whitelist = array( // Etc 'maxPlayers'
-			'worldType',
 			'hotkeyAimbotEnabled',
 			'protectionLevel',
-			'killsToRedSkull',
-			'killsToBlackSkull',
 			'pzLocked',
-			'removeChargesFromRunes',
-			'timeToDecreaseFrags',
-			'whiteSkullTime',
 			'stairJumpExhaustion',
-			'experienceByKillingPlayers',
-			'expFromPlayersLevelRange',
 			'loginProtocolPort',
 			'maxPlayers',
 			'motd',
@@ -258,68 +250,6 @@ if (
 			<tr>
 				<td>Port</td>
 				<td><?php echo $luaConfig['loginProtocolPort']; ?></td>
-			</tr>
-		</tbody>
-	</table>
-
-	<table class="table tbl-hover">
-		<tbody>
-			<tr class="yellow">
-				<td colspan="2">PvP information</td>
-			</tr>
-			<tr>
-				<td>World type</td>
-				<td><?php echo $luaConfig['worldType']; ?></td>
-			</tr>
-			<tr>
-				<td>Hotkey aimbot</td>
-				<td><?php echo toYesNo($luaConfig['hotkeyAimbotEnabled']); ?></td>
-			</tr>
-			<tr>
-				<td>Protection level</td>
-				<td><?php echo $luaConfig['protectionLevel']; ?></td>
-			</tr>
-			<tr>
-				<td>Kills to red skull</td>
-				<td><?php echo $luaConfig['killsToRedSkull']; ?></td>
-			</tr>
-			<tr>
-				<td>Kills to black skull</td>
-				<td><?php echo $luaConfig['killsToBlackSkull']; ?></td>
-			</tr>
-			<tr>
-				<td>Remove rune charges</td>
-				<td><?php echo toYesNo($luaConfig['removeChargesFromRunes']); ?></td>
-			</tr>
-			<?php if (isset($luaConfig['timeToDecreaseFrags'])): ?>
-				<tr>
-					<td>Time to decrease frags</td><!-- Legacy servers might need to remove *1000 -->
-					<td><?php echo toDuration($luaConfig['timeToDecreaseFrags']*1000); ?></td>
-				</tr>
-			<?php endif; ?>
-			<tr>
-				<td>Experience by killing players</td>
-				<td><?php echo toYesNo($luaConfig['experienceByKillingPlayers']); ?></td>
-			</tr>
-
-			<?php if ($luaConfig['experienceByKillingPlayers']): ?>
-				<tr>
-					<td>Experience gain kill threshold:</td>
-					<td><?php echo $luaConfig['expFromPlayersLevelRange']; ?>% of your level</td>
-				</tr>
-			<?php endif; ?>
-
-			<tr>
-				<td>White skull duration</td>
-				<td><?php echo toDuration($luaConfig['whiteSkullTime']); ?></td>
-			</tr>
-			<tr>
-				<td>Protection zone lock (non lethal attack)</td>
-				<td><?php echo toDuration($luaConfig['pzLocked']); ?></td>
-			</tr>
-			<tr>
-				<td>Stair jump exhaust</td>
-				<td><?php echo toDuration($luaConfig['stairJumpExhaustion']); ?></td>
 			</tr>
 		</tbody>
 	</table>
