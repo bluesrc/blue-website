@@ -200,12 +200,6 @@ CREATE TABLE IF NOT EXISTS `znote_deleted_characters` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS `znote_guild_wars` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `limit` int NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
-
 -- Helpdesk system
 CREATE TABLE IF NOT EXISTS `znote_tickets` (
   `id` int NOT NULL AUTO_INCREMENT,

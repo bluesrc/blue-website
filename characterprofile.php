@@ -685,11 +685,7 @@ if (isset($_GET['name']) === true && empty($_GET['name']) === false) {
 						`time`,
 						`level`,
 						`killed_by`,
-						`is_player`,
-						`mostdamage_by`,
-						`mostdamage_is_player`,
-						`unjustified`,
-						`mostdamage_unjustified`
+						`mostdamage_by`
 					FROM `player_deaths`
 					WHERE `player_id`=$user_id
 					ORDER BY `time` DESC
@@ -698,9 +694,7 @@ if (isset($_GET['name']) === true && empty($_GET['name']) === false) {
 
 				if ($deaths) {
 					foreach ($deaths as $d) {
-						$lasthit = ($d['is_player'])
-						? "<a href='characterprofile.php?name=".$d['killed_by']."'>".$d['killed_by']."</a>"
-						: $d['killed_by'];
+						$lasthit = $d['killed_by'];
 
 						?>
 						<tr>
@@ -708,20 +702,11 @@ if (isset($_GET['name']) === true && empty($_GET['name']) === false) {
 							<td>
 								<?php
 								echo "Killed at level ".$d['level']." by {$lasthit}";
-								if ($d['unjustified']) {
-									echo " <font color='red' style='font-style: italic;'>(unjustified)</font>";
-								}
 								$mostdmg = ($d['mostdamage_by'] !== $d['killed_by']) ? true : false;
 								if ($mostdmg) {
-									$mostdmg = ($d['mostdamage_is_player'])
-									? "<a href='characterprofile.php?name=".$d['mostdamage_by']."'>".$d['mostdamage_by']."</a>"
-									: $d['mostdamage_by'];
+									$mostdmg = $d['mostdamage_by'];
 
 									echo "<br>and by $mostdmg.";
-
-									if ($d['mostdamage_unjustified']) {
-										echo " <font color='red' style='font-style: italic;'>(unjustified)</font>";
-									}
 								} else {
 									echo " <b>(soloed)</b>";
 								}

@@ -155,7 +155,7 @@ player_history_skill:register()
 
 -- And on death
 local player_history_skill_death = CreatureEvent("player_history_skill_death")
-function player_history_skill_death.onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified, mostDamageUnjustified)
+function player_history_skill_death.onDeath(creature, corpse, killer, mostDamageKiller, _lastHitIgnored, _mostDamageIgnored)
 	--print("3-death["..creature:getName().."]")
 	historyLogoutEvent(Player(creature))
 end

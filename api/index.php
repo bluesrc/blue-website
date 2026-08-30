@@ -48,7 +48,6 @@ $response['data']['online'] = ($online !== false) ? (int)$online['count'] : 0;
 $response['data']['online_unique_ip'] = ($online !== false) ? (int)$online['unique'] : 0;
 $response['data']['client'] = $config['client'];
 $response['data']['port'] = $config['port'];
-$response['data']['guildwar'] = $config['guildwar_enabled'];
 $response['data']['forum'] = $config['forum']['enabled'];
 
 SendResponse($response);

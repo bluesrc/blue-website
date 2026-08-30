@@ -628,8 +628,6 @@
 	// So if your using TFS 1.x, you might need to disable guild nicks until the crash has been fixed.
 	$config['guild_allow_nicknames'] = true;
 
-	$config['guildwar_enabled'] = false;
-
 	// Use htaccess rewrite? (basically this makes website.com/username work instead of website.com/characterprofile.php?name=username
 	// Linux users needs to enable mod_rewrite php extention to make it work properly, so set it to false if your lost and using Linux.
 	$config['htwrite'] = true;
@@ -697,12 +695,8 @@
 		'sticky' => '<font color="green">[S]</font>',
 	);
 
-	// Guilds and guild war pages will do lots of queries on bigger databases.
-	// So its recommended to require login to view them, but you can disable this
-	// If you don't have any problems with load.
 	$config['require_login'] = array(
 		'guilds' => false,
-		'guildwars' => false,
 	);
 
 	// IMPORTANT! Write a character name(that exist) that will represent website bans!
@@ -816,7 +810,6 @@
 		17 => 'Pretending to Have Influence on Rule Enforcement',
 		18 => 'False Report to Gamemaster',
 		19 => 'Destructive Behaviour',
-		20 => 'Excessive Unjustified Player Killing',
 		21 => 'Spoiling Auction',
 	);
 
@@ -1012,13 +1005,6 @@
 			'description' => "5 x Crystal coin", // Description shown on website
 			'points' => 100, // How many points this offer costs
 		),
-		2 => array(
-			'type' => 1,
-			'itemid' => 2392,
-			'count' => 1,
-			'description' => "Fire sword",
-			'points' => 10,
-		),
 		3 => array(
 			'type' => 2,
 			'itemid' => 12466, // Item to display on page
@@ -1052,20 +1038,6 @@
 			'itemid' => [132, 140], // Outfit ID
 			'count' => 3, // Addon 0 = none, 1 = first, 2 = second, 3 = both
 			'description' => "Noble outfit with both addons",
-			'points' => 20,
-		),
-		8 => array(
-			'type' => 6,
-			'itemid' => 32, // Mount ID
-			'count' => 1,
-			'description' => "Gnarlhound mount",
-			'points' => 20,
-		),
-		9 => array(
-			'type' => 6,
-			'itemid' => 17,
-			'count' => 1,
-			'description' => "War horse",
 			'points' => 20,
 		),
 	);
