@@ -518,14 +518,14 @@
 				),
 			),
 			'male_outfit' => array(
-				'id' => 128,
+				'id' => 904,
 				'head' => 78,
 				'body' => 68,
 				'legs' => 58,
 				'feet' => 76
 			),
 			'female_outfit' => array(
-				'id' => 136,
+				'id' => 905,
 				'head' => 78,
 				'body' => 68,
 				'legs' => 58,
